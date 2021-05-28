@@ -129,7 +129,7 @@ int 21h
 
 call gecikme300ms
 RET 
-yazi db "KAZANDIN !!!","$"
+yazi db "TEBRIKLER, KAZANDIN !!!","$"
 
 
 
