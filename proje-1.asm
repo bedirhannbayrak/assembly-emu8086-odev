@@ -65,7 +65,21 @@ int 10h
 
 ret
  
-;-----------------------------------------------  
+;----------------------------------------------- 
+
+;----------------------------------------------- 
+
+cizmeBeyaz:
+
+mov al,0 ; boþ karakter
+mov bl,0ffh ; arkaplan kirmizi
+mov cx,3    ; ekrana 3 karakter yazdirir
+mov ah,09
+int 10h
+
+ret
+ 
+;-----------------------------------------------   
   
                 
 
@@ -135,7 +149,7 @@ inc dh
 mov ah,2
 int 10h   ; ekranda cursor posizyonu ayarlandi
 
-call cizme
+call cizmeBeyaz
 
 dec di
 cmp di,0
