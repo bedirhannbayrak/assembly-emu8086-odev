@@ -1,6 +1,7 @@
 
 org 100h 
 
+baslangic:
 
 mov al,7
 mov ah,05h
@@ -13,6 +14,18 @@ int 10h  ;  ekrani 40x25 olarak ayarlardi
 
 mov bh,0  ; aktif sayfayi belirtir
 
+
+mov dx,offset yazi3
+mov ah,09
+int 21h
+call gecikme300ms
+jmp tmp
+RET 
+yazi3 db "KUTULARI SIRASIYLA TEKRAR ET","$"
+ 
+
+tmp: 
+ 
 mov si,4  ;döngü 
 mov di,2  ; döngü
 
@@ -114,7 +127,7 @@ mov dx,offset yazi
 mov ah,09
 int 21h
 
-call gecikme
+call gecikme300ms
 RET 
 yazi db "KAZANDIN !!!","$"
 
@@ -153,7 +166,7 @@ mov dx,offset yazi2
 mov ah,09
 int 21h
 
-call gecikme
+call gecikme300ms
 RET 
 yazi2 db "KAYBETTIN !!!","$"
 
@@ -171,7 +184,7 @@ sayfayiGetir:
 
 mov ah,05h
 int 10h
-call gecikme
+call gecikme300ms
 
 ret
 ;----------------------------------------------- 
@@ -213,11 +226,11 @@ ret
                 
                 
 ;-----------------------------------------------
-gecikme:
+gecikme300ms:
 mov cx,4h
 mov dx,063e0h
 mov ah,86h
-int 15h ; 2d00h mikrosaniye gecikme verdik 
+int 15h ; 2d00h mikrosaniye gecikme300ms verdik 
 
 ret  
 ;-----------------------------------------------
