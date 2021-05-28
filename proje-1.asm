@@ -1,5 +1,6 @@
 
-org 100h
+org 100h 
+
 
 mov al,7
 mov ah,05h
@@ -21,10 +22,11 @@ call ayrisayfalar
 
 call aynisayfa
 
-call sayfalariSirala
+call sayfalariSirala 
 
-mov ax, 3
-int 33h
+
+
+
 
 ret ; programý kapatýr 
 
@@ -54,8 +56,8 @@ ret
 cizme:
 
 mov al,0 ; boþ karakter
-mov bl,0c1h ; arkaplan kirmizi on plan mavi
-mov cx,3    ; ekrana 2 karakter yazdirilacak
+mov bl,0c1h ; arkaplan kirmizi
+mov cx,3    ; ekrana 3 karakter yazdirir
 mov ah,09
 int 10h
 
@@ -69,8 +71,8 @@ ret
                 
 ;-----------------------------------------------
 gecikme:
-mov cx,02dh
-mov dx,0
+mov cx,4h
+mov dx,063e0h
 mov ah,86h
 int 15h ; 2d00h mikrosaniye gecikme verdik 
 
