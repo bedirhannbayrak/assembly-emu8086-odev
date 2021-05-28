@@ -19,10 +19,54 @@ call ayriSayfalarKutuYerlestir1234
 
 
 call sayfalariSirala
+ 
+jmp program 
+
+;--------LEVEL 2----------------------------------
+
+level2:
+    mov bh,0
+    call aynisayfa
+    
+    call randomGenerator
+    
+    call sayfalariSiralaLevel2
+    
+    jmp program 
+    
+;----------LEVEL 3-------------------------------- 
+
+level3:
+    mov bh,0
+    call aynisayfa
+    
+    call randomGenerator
+    
+    call sayfalariSiralaLevel3
+    
+    jmp program 
 
 
  
 
+
+;----------LEVEL 4-------------------------------- 
+
+level4:
+    mov bh,0
+    call aynisayfa
+    
+    call randomGenerator
+    
+    call sayfalariSiralaLevel4
+    
+    jmp program 
+
+
+ 
+;--------------------------------------------------
+
+program:
 mov si,100h
 karsilastirmaDongusu:
 
@@ -78,7 +122,9 @@ jmp atla
 ret 
 yazi db "TEBRIKLER, KAZANDIN !!","$"
 atla:
-call gecikme
+call gecikme1000ms
+
+jmp level4
 hlt 
 
 
@@ -98,7 +144,7 @@ jmp atla2
 ret 
 yazi2 db "KAYBETTIN !!","$"
 atla2:
-call gecikme
+call gecikme1000ms
 hlt
 
 
@@ -253,7 +299,39 @@ sayfayiGetir:
 
 mov ah,05h
 int 10h
-call gecikme
+call gecikme1000ms
+
+ret
+;-----------------------------------------------  
+
+;----------------------------------------------- 
+
+sayfayiGetirLevel2:
+
+mov ah,05h
+int 10h
+call gecikme750ms
+
+ret
+;----------------------------------------------- 
+
+;----------------------------------------------- 
+
+sayfayiGetirLevel3:
+
+mov ah,05h
+int 10h
+call gecikme400ms
+
+ret
+;----------------------------------------------- 
+;----------------------------------------------- 
+
+sayfayiGetirLevel4:
+
+mov ah,05h
+int 10h
+call gecikme200ms
 
 ret
 ;----------------------------------------------- 
@@ -329,11 +407,41 @@ ret
                 
                 
 ;-----------------------------------------------
-gecikme:
-mov cx,4h
-mov dx,063e0h
+gecikme1000ms:
+mov cx,0fh
+mov dx,4240h
 mov ah,86h
-int 15h ; 2d00h mikrosaniye gecikme verdik 
+int 15h ; 2d00h mikrosaniye gecikme1000ms verdik 
+
+ret  
+;-----------------------------------------------
+
+;-----------------------------------------------
+gecikme750ms:
+mov cx,0bh
+mov dx,71b0h
+mov ah,86h
+int 15h ; 2d00h mikrosaniye gecikme1000ms verdik 
+
+ret  
+;----------------------------------------------- 
+
+;-----------------------------------------------
+gecikme400ms:
+mov cx,06h
+mov dx,1a80h
+mov ah,86h
+int 15h ; 2d00h mikrosaniye gecikme1000ms verdik 
+
+ret  
+;-----------------------------------------------
+
+;-----------------------------------------------
+gecikme200ms:
+mov cx,03h
+mov dx,0d40h
+mov ah,86h
+int 15h ; 2d00h mikrosaniye gecikme1000ms verdik 
 
 ret  
 ;-----------------------------------------------
@@ -417,7 +525,7 @@ sayfalariSirala:
 mov al,0
 call sayfayiGetir 
 
-call gecikme
+call gecikme1000ms
 
 
 mov al,[100h]
@@ -561,4 +669,96 @@ setCursorDHDL:
 
 ret
 	
-;-----------------------------------------------------RET
+;-----------------------------------------------------RET 
+
+
+;-------------------------------------------------
+ 
+sayfalariSiralaLevel2:
+ 
+mov al,0
+call sayfayiGetir 
+
+call gecikme750ms
+
+
+mov al,[100h]
+call sayfayiGetirLevel2
+ 
+mov al,[101h]
+call sayfayiGetirLevel2 
+
+mov al,[102h]
+call sayfayiGetirLevel2
+
+mov al,[103h] 
+call sayfayiGetirLevel2
+ 
+
+mov al,0
+call sayfayiGetirLevel2
+
+ret 
+
+
+;-------------------------------------------------
+
+sayfalariSiralaLevel3:
+ 
+mov al,0
+call sayfayiGetir 
+
+call gecikme750ms
+
+
+mov al,[100h]
+call sayfayiGetirLevel3
+ 
+mov al,[101h]
+call sayfayiGetirLevel3 
+
+mov al,[102h]
+call sayfayiGetirLevel3
+
+mov al,[103h] 
+call sayfayiGetirLevel3
+ 
+
+mov al,0
+call sayfayiGetirLevel3
+
+ret 
+
+
+;------------------------------------------------- 
+
+;-------------------------------------------------
+
+sayfalariSiralaLevel4:
+ 
+mov al,0
+call sayfayiGetir 
+
+call gecikme750ms
+
+
+mov al,[100h]
+call sayfayiGetirLevel4
+ 
+mov al,[101h]
+call sayfayiGetirLevel4 
+
+mov al,[102h]
+call sayfayiGetirLevel4
+
+mov al,[103h] 
+call sayfayiGetirLevel4
+ 
+
+mov al,0
+call sayfayiGetirLevel4
+
+ret 
+
+
+;-------------------------------------------------
