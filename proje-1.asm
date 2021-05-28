@@ -2,7 +2,9 @@
 org 100h 
 
 call randomGenerator
-
+mov al,7
+mov ah,05h
+int 10h
 
 
 mov al,0h  
@@ -62,9 +64,42 @@ call kutu4f
 
 basarili:
 
+mov ax,0700h
+mov ds,ax
+
+MOV dh,2
+mov dl,6
+call setCursorDHDL
+
+mov dx,offset yazi
+mov ah,09
+int 21h
+jmp atla
+ret 
+yazi db "TEBRIKLER, KAZANDIN !!","$"
+atla:
+call gecikme
 hlt 
 
 
+exit: 
+
+mov ax,0700h
+mov ds,ax  
+
+MOV dh,2
+mov dl,10
+call setCursorDHDL
+
+mov dx,offset yazi2
+mov ah,09
+int 21h 
+jmp atla2
+ret 
+yazi2 db "KAYBETTIN !!","$"
+atla2:
+call gecikme
+hlt
 
 
 
@@ -205,8 +240,6 @@ jmp don
 
 
 
-exit:
-hlt
 
 
 
@@ -505,8 +538,7 @@ RET
 
 
 
-;------------------------------------------------------------------------------------------------------------------------------------------- 
-
+;-------------------------------------------------------------------------------------------- 
 griArkaPlan01234:
     mov bh,0
     call aynisayfa 
@@ -521,4 +553,12 @@ griArkaPlan01234:
 
 ret
 
+;--------SETCURSOR DH DL --------------
+setCursorDHDL:
+	mov bh, 0
+	mov ah, 2
+	int 10h
 
+ret
+	
+;-----------------------------------------------------RET
