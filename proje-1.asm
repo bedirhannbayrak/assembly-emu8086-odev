@@ -5,11 +5,6 @@ call randomGenerator
 
 
 
-mov al,7
-mov ah,05h
-int 10h
-
-
 mov al,0h  
 mov ah,0
 int 10h  ;  ekrani 40x25 olarak ayarlardi 
@@ -21,21 +16,55 @@ call griArkaPlan01234 ;
 call ayriSayfalarKutuYerlestir1234
 
 
-call sayfalariSirala 
+call sayfalariSirala
 
-cmp [100h],1
+
+ 
+
+mov si,100h
+karsilastirmaDongusu:
+
+cmp [si],1
 je kutu1 
 
-cmp [100h],2
+cmp [si],2
 je kutu2
 
-cmp [100h],3
+cmp [si],3
 je kutu3
 
-cmp [100h],4
-je kutu4 
+cmp [si],4
+je kutu4
 
-int 21h
+don:
+
+inc si
+cmp si,104h
+jb karsilastirmaDongusu
+
+jmp basarili
+
+
+
+kutu1:
+call kutu1f
+
+kutu2:
+call kutu2f
+
+kutu3:
+call kutu3f
+
+kutu4:
+call kutu4f
+
+
+
+basarili:
+
+hlt 
+
+
 
 
 
@@ -45,7 +74,7 @@ int 21h
 
 ;------KUTU 1 ---------
 
-kutu1:
+kutu1f:
 call mouseKontrol
 
 cmp cx,40h
@@ -68,13 +97,12 @@ int 10h
 
 call tekKareCizme ; dh,4 ; satir 
 
-
-ret  
+jmp don  
 ;---------------------------------  
 
 ;------KUTU 2 ---------
 
-kutu2:
+kutu2f:
 call mouseKontrol
 
 cmp cx,60h
@@ -97,13 +125,12 @@ int 10h
 
 call tekKareCizme ; dh,4 ; satir 
 
-
-ret  
+jmp don    
 ;---------------------------------
 
 
 ;------KUTU 3 --------- 
-kutu3:
+kutu3f:
 call mouseKontrol
 
 cmp cx,80h
@@ -126,13 +153,13 @@ int 10h
 
 call tekKareCizme ; dh,4 ; satir  
 
-ret
+jmp don  
  
 ;---------------------------------
 
 ;------KUTU 4 ---------
 
-kutu4:
+kutu4f:
 call mouseKontrol
 
 cmp cx,0a0h
@@ -156,7 +183,7 @@ int 10h
 call tekKareCizme ; dh,4 ; satir 
 
 
-ret  
+jmp don    
 ;---------------------------------
 
 
@@ -179,7 +206,7 @@ ret
 
 
 exit:
-ret ; programý kapatýr 
+hlt
 
 
 
