@@ -22,8 +22,10 @@ call ayrisayfalar
 
 call aynisayfa
 
-call sayfalariSirala 
+call sayfalariSirala   
 
+
+call mouseKontrol
 
 
 
@@ -174,6 +176,25 @@ ret
 
 
 ;-------------------------------------------------
+                                                      
+                                                      
+;-------------------------------------------------
 
+mouseKontrol:
+                                                      
+  mov  ax, 0000h  ; reset mouse
+  int  33h        ; -> AX BX
+  cmp  ax, 0FFFFh
+  mov  ax, 0001h  ; show mouse
+  int  33h
+MouseLP:
+  mov  ax, 0003h  ; get mouse position and buttonstatus
+  int  33h        ; -> BX CX DX
+  test bx, 1      ; check left mouse click
+  jz   MouseLP    ; Loop until mouse click 
+  
+  ret
+  
+;-------------------------------------------------
 
 
