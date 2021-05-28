@@ -1,6 +1,9 @@
 
 org 100h 
 
+call randomGenerator
+
+
 
 mov al,7
 mov ah,05h
@@ -12,35 +15,95 @@ mov ah,0
 int 10h  ;  ekrani 40x25 olarak ayarlardi 
 
 
+call griArkaPlan01234 ; 
+
+
+call ayriSayfalarKutuYerlestir1234
+
+
+call sayfalariSirala 
+
+cmp [100h],1
+je kutu1 
+
+cmp [100h],2
+je kutu2
+
+cmp [100h],3
+je kutu3
+
+cmp [100h],4
+je kutu4 
+
+int 21h
+
+
+
+
+
+
+
+;------KUTU 1 ---------
+
+kutu1:
+call mouseKontrol
+
+cmp cx,40h
+jb exit
+cmp cx,67h
+ja exit 
+cmp dx,28h
+jb exit
+cmp dx,37h
+ja exit 
+
+
+
+mov dh,4  ;satir
+mov dl,8 ; sutun 
+
 mov bh,0
-call aynisayfa 
-mov bh,1
-call aynisayfa
-mov bh,2
-call aynisayfa
-mov bh,3
-call aynisayfa
-mov bh,4
-call aynisayfa
+mov ah, 2
+int 10h
+
+call tekKareCizme ; dh,4 ; satir 
 
 
-mov bh,1  ; aktif sayfayi belirtir
+ret  
+;---------------------------------  
 
-mov si,4  ;döngü 
-mov di,2  ; döngü
+;------KUTU 2 ---------
+
+kutu2:
+call mouseKontrol
+
+cmp cx,60h
+jb exit
+cmp cx,87h
+ja exit 
+cmp dx,28h
+jb exit
+cmp dx,37h
+ja exit 
 
 
 
-call ayrisayfalar
+mov dh,4  ;satir
+mov dl,12 ; sutun
+
+mov bh,0
+mov ah, 2
+int 10h
+
+call tekKareCizme ; dh,4 ; satir 
 
 
+ret  
+;---------------------------------
 
 
-call sayfalariSirala
-
-; 3 - 4 - 1 - 2 
-
-
+;------KUTU 3 --------- 
+kutu3:
 call mouseKontrol
 
 cmp cx,80h
@@ -55,15 +118,21 @@ ja exit
 
 
 mov dh,4  ;satir
-mov dl,12 ; sutun
+mov dl,16 ; sutun
 
-mov bh,4
+mov bh,0
 mov ah, 2
 int 10h
 
-call tekKareCizme ; dh,4 ; satir   
+call tekKareCizme ; dh,4 ; satir  
 
+ret
+ 
+;---------------------------------
 
+;------KUTU 4 ---------
+
+kutu4:
 call mouseKontrol
 
 cmp cx,0a0h
@@ -78,19 +147,17 @@ ja exit
 
 
 mov dh,4  ;satir
-mov dl,16 ; sutun
+mov dl,20 ; sutun
 
-mov bh,4
+mov bh,0
 mov ah, 2
 int 10h
 
-call tekKareCizme ; dh,4 ; satir
+call tekKareCizme ; dh,4 ; satir 
 
 
-
-
-
-
+ret  
+;---------------------------------
 
 
 
@@ -135,7 +202,7 @@ ret
 
 
 
-;----------------------------------------------- 
+;----------------------------------------------------------------------------------------------------------------------------------------- 
 
 cizme:
 
@@ -154,7 +221,7 @@ ret
 cizmeYesil:
 
 mov al,0 ; boþ karakter
-mov bl,0a1h ; arkaplan kirmizi
+mov bl,0a1h ; arkaplan yeþil
 mov cx,3    ; ekrana 3 karakter yazdirir
 mov ah,09
 int 10h
@@ -182,8 +249,6 @@ ret
 tekKareCizme:
 
 mov di,2 
-
-add dl,4
 tekrar5:
 inc dh
 mov ah,2
@@ -198,9 +263,8 @@ jnz tekrar5
 ret     
 
 
-;-------------------------------------------------  
+;-------------------------------------------------------------------------------------------------------------------------------------------  
   
-                
 
                 
                 
@@ -217,10 +281,12 @@ ret
 
 
 
-
 ;-----------------------------------------------
 
-ayrisayfalar:
+ayriSayfalarKutuYerlestir1234:
+mov bh,1  ; hangi sayfadan baslyacagi
+mov si,4  ;dongu
+mov di,2  ; dongu
 
 mov dh,4 ; satir
 mov dl,4 ; sutun
@@ -247,10 +313,6 @@ jnz tekrar1
 
 ret
 ;-------------------------------------------------
-
-
-
-
 
 
  
@@ -292,22 +354,22 @@ ret
  
 sayfalariSirala:
  
-
 mov al,0
 call sayfayiGetir 
 
 call gecikme
 
 
-mov al,1
-call sayfayiGetir 
-mov al,2
+mov al,[100h]
+call sayfayiGetir
+ 
+mov al,[101h]
 call sayfayiGetir 
 
-mov al,3
+mov al,[102h]
 call sayfayiGetir
 
-mov al,4  
+mov al,[103h] 
 call sayfayiGetir
  
 
@@ -337,6 +399,99 @@ MouseLP:
   
   ret
   
-;-------------------------------------------------
+;-------------------------------------------------  
+
+
+
+;--------------RANDOM----------------------------------------------------------------------------------------------------------
+ 
+randomGenerator:
+
+mov bx,2000h
+mov ds,bx
+mov bx,100h
+
+mov si,4 ; loop miktarý 
+
+mov [100h],0
+mov [101h],0
+mov [102h],0
+mov [103h],0
+
+
+call random
+
+mov [bx],dl
+
+inc bx
+
+loop:
+call random
+
+call compare
+
+mov [bx],dl
+ 
+inc bx
+dec si
+
+cmp si,1
+jg loop
+
+exitFromRandom:
+ret
+
+
+
+
+
+;---------karsilastirma
+
+compare:
+cmp [103h],0
+jne exitFromRandom
+cmp dl,[0100h]
+je loop
+cmp dl,[0101h]
+je loop
+cmp dl,[0102h]
+je loop
+cmp dl,[0103h]
+je loop
+
+ret 
+
+
+;------------------random fonksiyonu------------
+;------DL ' ye  1-4 arasý sayý kaydeder
+random:
+
+   MOV AH, 00h  ; interrupts to get system time        
+   INT 1AH      ; CX:DX now hold number of clock ticks since midnight      
+
+   mov  ax, dx
+   xor  dx, dx
+   mov  cx, 4    
+   div  cx       ; here dx contains the remainder of the division - from 0 to 9   
+   add dl,1  
+RET 
+
+
+
+;------------------------------------------------------------------------------------------------------------------------------------------- 
+
+griArkaPlan01234:
+    mov bh,0
+    call aynisayfa 
+    mov bh,1
+    call aynisayfa
+    mov bh,2
+    call aynisayfa
+    mov bh,3
+    call aynisayfa
+    mov bh,4
+    call aynisayfa 
+
+ret
 
 
