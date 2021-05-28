@@ -105,6 +105,19 @@ call tekKareCizme
 ;------------------------------
 
 
+mov dl,10 ; sutun
+mov dh,2  ;satir
+mov bh,4
+mov ah, 2
+int 10h  
+mov dx,offset yazi
+mov ah,09
+int 21h
+
+call gecikme
+RET 
+yazi db "KAZANDIN !!!","$"
+
 
 
 
@@ -131,6 +144,19 @@ call tekKareCizme
 
 
 exit:
+mov dl,10 ; sutun
+mov dh,2  ;satir
+mov bh,4
+mov ah, 2
+int 10h  
+mov dx,offset yazi2
+mov ah,09
+int 21h
+
+call gecikme
+RET 
+yazi2 db "KAYBETTIN !!!","$"
+
 ret ; programý kapatýr 
 
 
