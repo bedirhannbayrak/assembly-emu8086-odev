@@ -1,7 +1,6 @@
 
 org 100h 
 
-baslangic:
 
 mov al,7
 mov ah,05h
@@ -10,22 +9,23 @@ int 10h
 
 mov al,0h  
 mov ah,0
-int 10h  ;  ekrani 40x25 olarak ayarlardi
-
-mov bh,0  ; aktif sayfayi belirtir
+int 10h  ;  ekrani 40x25 olarak ayarlardi 
 
 
-mov dx,offset yazi3
-mov ah,09
-int 21h
-call gecikme300ms
-jmp tmp
-RET 
-yazi3 db "KUTULARI SIRASIYLA TEKRAR ET","$"
- 
+mov bh,0
+call aynisayfa 
+mov bh,1
+call aynisayfa
+mov bh,2
+call aynisayfa
+mov bh,3
+call aynisayfa
+mov bh,4
+call aynisayfa
 
-tmp: 
- 
+
+mov bh,1  ; aktif sayfayi belirtir
+
 mov si,4  ;döngü 
 mov di,2  ; döngü
 
@@ -33,13 +33,14 @@ mov di,2  ; döngü
 
 call ayrisayfalar
 
-call aynisayfa
+
+
 
 call sayfalariSirala
 
-;SIRA  3 - 4 - 1 - 2 
+; 3 - 4 - 1 - 2 
 
-;-----1.KUTU KONTROL---------  
+
 call mouseKontrol
 
 cmp cx,80h
@@ -51,14 +52,18 @@ jb exit
 cmp dx,37h
 ja exit 
 
+
+
+mov dh,4  ;satir
 mov dl,12 ; sutun
-call setCursorPosition
+
+mov bh,4
+mov ah, 2
+int 10h
 
 call tekKareCizme ; dh,4 ; satir   
 
-   
-   
-;-----2.KUTU KONTROL---------   
+
 call mouseKontrol
 
 cmp cx,0a0h
@@ -71,65 +76,15 @@ cmp dx,37h
 ja exit 
 
 
+
+mov dh,4  ;satir
 mov dl,16 ; sutun
-call setCursorPosition
 
-call tekKareCizme
-
-
-;-----3.KUTU KONTROL---------
-   
-call mouseKontrol
-
-cmp cx,040h
-jb exit
-cmp cx,057h
-ja exit 
-cmp dx,28h
-jb exit
-cmp dx,37h
-ja exit 
-
-
-mov dl,4 ; sutun
-call setCursorPosition
-
-call tekKareCizme
-
-
-;-----4.KUTU KONTROL---------   
-call mouseKontrol
-
-cmp cx,060h
-jb exit
-cmp cx,077h
-ja exit 
-cmp dx,28h
-jb exit
-cmp dx,37h
-ja exit 
-
-
-mov dl,8 ; sutun
-call setCursorPosition
-
-call tekKareCizme 
-
-;------------------------------
-
-
-mov dl,10 ; sutun
-mov dh,2  ;satir
 mov bh,4
 mov ah, 2
-int 10h  
-mov dx,offset yazi
-mov ah,09
-int 21h
+int 10h
 
-call gecikme300ms
-RET 
-yazi db "TEBRIKLER, KAZANDIN !!!","$"
+call tekKareCizme ; dh,4 ; satir
 
 
 
@@ -157,19 +112,6 @@ yazi db "TEBRIKLER, KAZANDIN !!!","$"
 
 
 exit:
-mov dl,10 ; sutun
-mov dh,2  ;satir
-mov bh,4
-mov ah, 2
-int 10h  
-mov dx,offset yazi2
-mov ah,09
-int 21h
-
-call gecikme300ms
-RET 
-yazi2 db "KAYBETTIN !!!","$"
-
 ret ; programý kapatýr 
 
 
@@ -184,7 +126,7 @@ sayfayiGetir:
 
 mov ah,05h
 int 10h
-call gecikme300ms
+call gecikme
 
 ret
 ;----------------------------------------------- 
@@ -219,18 +161,55 @@ int 10h
 
 ret
  
-;-----------------------------------------------   
+;-----------------------------------------------  
+
+;----------------------------------------------- 
+
+cizmeGri:
+
+mov al,0 ; boþ karakter
+mov bl,071h ; arkaplan kirmizi
+mov cx,3    ; ekrana 3 karakter yazdirir
+mov ah,09
+int 10h
+
+ret
+ 
+;----------------------------------------------- 
+
+;-----------------------------------------------
+
+tekKareCizme:
+
+mov di,2 
+
+add dl,4
+tekrar5:
+inc dh
+mov ah,2
+int 10h   ; ekranda cursor posizyonu ayarlandi
+
+call cizmeYesil
+
+dec di
+cmp di,0
+jnz tekrar5
+
+ret     
+
+
+;-------------------------------------------------  
   
                 
 
                 
                 
 ;-----------------------------------------------
-gecikme300ms:
+gecikme:
 mov cx,4h
 mov dx,063e0h
 mov ah,86h
-int 15h ; 2d00h mikrosaniye gecikme300ms verdik 
+int 15h ; 2d00h mikrosaniye gecikme verdik 
 
 ret  
 ;-----------------------------------------------
@@ -271,28 +250,7 @@ ret
 
 
 
-;-----------------------------------------------
 
-tekKareCizme:
-
-mov di,2 
-
-add dl,4
-tekrar5:
-inc dh
-mov ah,2
-int 10h   ; ekranda cursor posizyonu ayarlandi
-
-call cizmeYesil
-
-dec di
-cmp di,0
-jnz tekrar5
-
-ret     
-
-
-;-------------------------------------------------
 
 
  
@@ -303,8 +261,6 @@ ret
 aynisayfa:
 mov si,4
 mov di,2
-
-mov bh,4
 mov dh,4 ; satir
 mov dl,4 ; sutun
 tekrar3:
@@ -314,7 +270,7 @@ inc dh
 mov ah,2
 int 10h   ; ekranda cursor posizyonu ayarlandi
 
-call cizme
+call cizmeGri
 
 dec di
 cmp di,0
@@ -336,20 +292,27 @@ ret
  
 sayfalariSirala:
  
+
+mov al,0
+call sayfayiGetir 
+
+call gecikme
+
+
+mov al,1
+call sayfayiGetir 
 mov al,2
 call sayfayiGetir 
 
 mov al,3
 call sayfayiGetir
 
+mov al,4  
+call sayfayiGetir
+ 
+
 mov al,0
 call sayfayiGetir
-
-mov al,1
-call sayfayiGetir 
-
-mov al,4  
-call sayfayiGetir 
 
 ret 
 
@@ -374,20 +337,6 @@ MouseLP:
   
   ret
   
-;------------------------------------------------- 
+;-------------------------------------------------
 
 
-
-
-;------------------------------------------------- 
-
-setCursorPosition:  ; dl'yi fonksiyon ustunde belirt
-mov dh,4  ;satir
-mov bh,4
-mov ah, 2
-int 10h  
-
-ret
-
-
-;------------------------------------------------- 
