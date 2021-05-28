@@ -24,9 +24,9 @@ call aynisayfa
 
 call sayfalariSirala
 
-; 3 - 4 - 1 - 2 
+;SIRA  3 - 4 - 1 - 2 
 
-
+;-----1.KUTU KONTROL---------  
 call mouseKontrol
 
 cmp cx,80h
@@ -38,18 +38,14 @@ jb exit
 cmp dx,37h
 ja exit 
 
-
-
-mov dh,4  ;satir
 mov dl,12 ; sutun
-
-mov bh,4
-mov ah, 2
-int 10h
+call setCursorPosition
 
 call tekKareCizme ; dh,4 ; satir   
 
-
+   
+   
+;-----2.KUTU KONTROL---------   
 call mouseKontrol
 
 cmp cx,0a0h
@@ -62,15 +58,52 @@ cmp dx,37h
 ja exit 
 
 
-
-mov dh,4  ;satir
 mov dl,16 ; sutun
+call setCursorPosition
 
-mov bh,4
-mov ah, 2
-int 10h
+call tekKareCizme
 
-call tekKareCizme ; dh,4 ; satir
+
+;-----3.KUTU KONTROL---------
+   
+call mouseKontrol
+
+cmp cx,040h
+jb exit
+cmp cx,057h
+ja exit 
+cmp dx,28h
+jb exit
+cmp dx,37h
+ja exit 
+
+
+mov dl,4 ; sutun
+call setCursorPosition
+
+call tekKareCizme
+
+
+;-----4.KUTU KONTROL---------   
+call mouseKontrol
+
+cmp cx,060h
+jb exit
+cmp cx,077h
+ja exit 
+cmp dx,28h
+jb exit
+cmp dx,37h
+ja exit 
+
+
+mov dl,8 ; sutun
+call setCursorPosition
+
+call tekKareCizme 
+
+;------------------------------
+
 
 
 
@@ -302,6 +335,20 @@ MouseLP:
   
   ret
   
-;-------------------------------------------------
+;------------------------------------------------- 
 
 
+
+
+;------------------------------------------------- 
+
+setCursorPosition:  ; dl'yi fonksiyon ustunde belirt
+mov dh,4  ;satir
+mov bh,4
+mov ah, 2
+int 10h  
+
+ret
+
+
+;------------------------------------------------- 
