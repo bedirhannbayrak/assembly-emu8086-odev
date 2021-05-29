@@ -28,7 +28,28 @@ jmp program
 
 ;--------LEVEL 2----------------------------------
 
-level2:
+level2: 
+    
+    ;---------------TEBRIK MESAJI-------------
+mov ax,0700h
+mov ds,ax
+
+MOV dh,2
+mov dl,6
+call setCursorDHDL
+
+mov dx,offset yazi
+mov ah,09
+int 21h
+jmp atla
+ret 
+yazi db "TEBRIKLER, 2.SEVIYEYE GECTIN","$" 
+
+atla:
+call gecikme1000ms
+
+;---------------TEBRIK MESAJI-------------
+
     mov bx,3000h
     mov ds,bx
     mov [300h],2
@@ -45,6 +66,25 @@ level2:
 ;----------LEVEL 3-------------------------------- 
 
 level3:
+ ;---------------TEBRIK MESAJI-------------
+           mov ax,0700h
+        mov ds,ax
+        
+        MOV dh,2
+        mov dl,6
+        call setCursorDHDL
+        
+        mov dx,offset level3yazi
+        mov ah,09
+        int 21h
+        jmp atla2
+        ret 
+        level3yazi db "TEBRIKLER, 3.SEVIYEYE GECTIN","$"
+        
+        atla2:
+        call gecikme1000ms               
+  ;---------------TEBRIK MESAJI-------------      
+        
     mov bx,3000h
     mov ds,bx
     mov [300h],3
@@ -65,6 +105,26 @@ level3:
 ;----------LEVEL 4-------------------------------- 
 
 level4:
+
+;---------------TEBRIK MESAJI-------------   
+   mov ax,0700h
+mov ds,ax
+
+MOV dh,2
+mov dl,6
+call setCursorDHDL
+
+mov dx,offset level4yazi
+mov ah,09
+int 21h
+jmp atlaLevel3
+ret 
+level4yazi db "TEBRIKLER, SON SEVIYEYE GECTIN","$"
+
+atlaLevel3:
+call gecikme1000ms 
+;---------------TEBRIK MESAJI-------------   
+
     mov bx,3000h
     mov ds,bx
     mov [300h],4
@@ -124,22 +184,6 @@ call kutu4f
 
 basarili:
 
-mov ax,0700h
-mov ds,ax
-
-MOV dh,2
-mov dl,6
-call setCursorDHDL
-
-mov dx,offset yazi
-mov ah,09
-int 21h
-jmp atla
-ret 
-yazi db "TEBRIKLER, 2.SEVIYEYE GECTIN","$" 
-
-atla:
-call gecikme1000ms
 
 mov bx,3000h
     mov ds,bx
@@ -147,46 +191,15 @@ mov bx,3000h
    cmp [300h],1
    je level2
    
-   mov ax,0700h
-mov ds,ax
 
-MOV dh,2
-mov dl,6
-call setCursorDHDL
-
-mov dx,offset level3yazi
-mov ah,09
-int 21h
-jmp atla2
-ret 
-level3yazi db "TEBRIKLER, 3.SEVIYEYE GECTIN","$"
-
-atla2:
-call gecikme1000ms 
    
 mov bx,3000h
     mov ds,bx
    
    cmp [300h],2
    je level3 
-   
-   mov ax,0700h
-mov ds,ax
 
-MOV dh,2
-mov dl,6
-call setCursorDHDL
 
-mov dx,offset level4yazi
-mov ah,09
-int 21h
-jmp atlaLevel3
-ret 
-level4yazi db "TEBRIKLER, SON SEVIYEYE GECTIN","$"
-
-atlaLevel3:
-call gecikme1000ms 
-   
    
 
 
@@ -210,7 +223,7 @@ mov ah,09
 int 21h
 jmp atlaLevel4
 ret 
-levelSonYazi db "-------TEBRIKLER,KAZANDIN----------------","$"
+levelSonYazi db "----TEBRIKLER,KAZANDIN--------","$"
 
 atlaLevel4:
 call gecikme1000ms
@@ -237,7 +250,7 @@ mov ah,09
 int 21h 
 jmp atlaExit
 ret 
-yazi2 db "-----------KAYBETTIN!!----------------","$"
+yazi2 db "-----------KAYBETTIN!!--------","$"
 atlaExit:
 call gecikme1000ms
 hlt
