@@ -1,5 +1,9 @@
 
-org 100h 
+org 100h
+
+mov bx,3000h
+    mov ds,bx
+    mov [300h],1 ; LEVEL 
 
 call randomGenerator
 mov al,7
@@ -25,6 +29,10 @@ jmp program
 ;--------LEVEL 2----------------------------------
 
 level2:
+    mov bx,3000h
+    mov ds,bx
+    mov [300h],2
+    
     mov bh,0
     call aynisayfa
     
@@ -37,6 +45,10 @@ level2:
 ;----------LEVEL 3-------------------------------- 
 
 level3:
+    mov bx,3000h
+    mov ds,bx
+    mov [300h],3
+    
     mov bh,0
     call aynisayfa
     
@@ -53,6 +65,10 @@ level3:
 ;----------LEVEL 4-------------------------------- 
 
 level4:
+    mov bx,3000h
+    mov ds,bx
+    mov [300h],4
+    
     mov bh,0
     call aynisayfa
     
@@ -120,11 +136,90 @@ mov ah,09
 int 21h
 jmp atla
 ret 
-yazi db "TEBRIKLER, KAZANDIN !!","$"
+yazi db "TEBRIKLER, 2.SEVIYEYE GECTIN","$" 
+
 atla:
 call gecikme1000ms
 
-jmp level4
+mov bx,3000h
+    mov ds,bx
+   
+   cmp [300h],1
+   je level2
+   
+   mov ax,0700h
+mov ds,ax
+
+MOV dh,2
+mov dl,6
+call setCursorDHDL
+
+mov dx,offset level3yazi
+mov ah,09
+int 21h
+jmp atla2
+ret 
+level3yazi db "TEBRIKLER, 3.SEVIYEYE GECTIN","$"
+
+atla2:
+call gecikme1000ms 
+   
+mov bx,3000h
+    mov ds,bx
+   
+   cmp [300h],2
+   je level3 
+   
+   mov ax,0700h
+mov ds,ax
+
+MOV dh,2
+mov dl,6
+call setCursorDHDL
+
+mov dx,offset level4yazi
+mov ah,09
+int 21h
+jmp atlaLevel3
+ret 
+level4yazi db "TEBRIKLER, SON SEVIYEYE GECTIN","$"
+
+atlaLevel3:
+call gecikme1000ms 
+   
+   
+
+
+   
+mov bx,3000h
+    mov ds,bx
+   
+   cmp [300h],3
+   je level4
+   
+
+   mov ax,0700h
+mov ds,ax
+
+MOV dh,2
+mov dl,6
+call setCursorDHDL
+
+mov dx,offset levelSonYazi
+mov ah,09
+int 21h
+jmp atlaLevel4
+ret 
+levelSonYazi db "-------TEBRIKLER,KAZANDIN----------------","$"
+
+atlaLevel4:
+call gecikme1000ms
+call gecikme1000ms
+ 
+   
+
+
+
 hlt 
 
 
@@ -134,16 +229,16 @@ mov ax,0700h
 mov ds,ax  
 
 MOV dh,2
-mov dl,10
+mov dl,6
 call setCursorDHDL
 
 mov dx,offset yazi2
 mov ah,09
 int 21h 
-jmp atla2
+jmp atlaExit
 ret 
-yazi2 db "KAYBETTIN !!","$"
-atla2:
+yazi2 db "-----------KAYBETTIN!!----------------","$"
+atlaExit:
 call gecikme1000ms
 hlt
 
